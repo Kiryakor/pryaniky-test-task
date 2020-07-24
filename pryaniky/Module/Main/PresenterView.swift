@@ -31,10 +31,11 @@ class PresenterView: PresenterProtocol {
     }
     
     func loadData() {
-        Networking.loadData(URL: URL(string: "https://pryaniky.com/static/json/sample.json")!) { [weak self](data) in
-            guard let data = data else { return }
-            self?.data = data
+        Networking.loadData(URL: URL(string: "https://pryaniky.com/static/json/sample.json")!) { [weak self] (data,response,error)  in
+            guard let data = data,error == nil else { return }
             DispatchQueue.main.async {
+                guard let data = try? JSONDecoder().decode(Main.self, from: data) else { return }
+                self?.data = data
                 self?.view.reload()
             }
         }

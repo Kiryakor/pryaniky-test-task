@@ -9,14 +9,9 @@
 import Foundation
 
 class Networking{
-    static func loadData(URL:URL,complition:@escaping(Main?)->Void){
+    static func loadData(URL:URL,complition:@escaping(Data?,URLResponse?,Error?)->Void){
         URLSession(configuration: .default).dataTask(with: URL) { (data, response, error) in
-            guard let data = data,error == nil else {
-                complition(nil)
-                return
-            }
-            let json = try? JSONDecoder().decode(Main.self, from: data)
-            complition(json)
+            complition(data,response,error)
         }.resume()
     }
     
